@@ -1,0 +1,98 @@
+package com.aragon.juegodelavida;
+
+    public class JuegoDeLaVida {
+        private int renglones;
+        private int columnas;
+        private Array2d grid;
+
+        public JuegoDeLaVida(int rows, int cols) {
+            this.renglones = rows;
+            this.columnas = cols;
+            this.grid = new Array2d(rows, cols);
+
+            grid.limpiar(0);
+        }
+
+        public void configurarInicial(int[][] patron) {
+            for (int i = 0; i < patron.length; i++) {
+                int row = patron[i][0];
+                int col = patron[i][1];
+                if (row >= 0 && row < renglones && col >= 0 && col < columnas) {
+                    grid.setItem(row, col, 1);
+                }
+            }
+        }
+
+        private int contarVecinos(int row, int col) {
+            int count = 0;
+
+
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if (i == 0 && j == 0) {
+                        continue;
+                    }
+
+                    int neighborRow = row + i;
+                    int neighborCol = col + j;
+
+
+                    if (neighborRow >= 0 && neighborRow < renglones &&
+                            neighborCol >= 0 && neighborCol < columnas) {
+                        if (grid.getItem(neighborRow, neighborCol) == 1) {
+                            count++;
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+
+        public void siguienteGeneracion() {
+            Array2d nuevaGeneracion = new Array2d(renglones, columnas);
+            nuevaGeneracion.limpiar(0);
+
+            for (int i = 0; i < renglones; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    int vecinos = contarVecinos(i, j);
+                    int celdaActual = grid.getItem(i, j);
+
+
+                    if (celdaActual == 1) {
+                        if (vecinos == 2 || vecinos == 3) {
+                            nuevaGeneracion.setItem(i, j, 1);
+                        } else {
+                            nuevaGeneracion.setItem(i, j, 0);
+                        }
+                    } else {
+                        if (vecinos == 3) {
+                            nuevaGeneracion.setItem(i, j, 1);
+                        } else {
+                            nuevaGeneracion.setItem(i, j, 0);
+                        }
+                    }
+                }
+            }
+
+            grid = nuevaGeneracion;
+        }
+
+        public void mostrarGeneracion(int numeroGeneracion) {
+            System.out.println("Generación " + numeroGeneracion + ":");
+            for (int i = 0; i < renglones; i++) {
+                for (int j = 0; j < columnas; j++) {
+                    if (grid.getItem(i, j) == 1) {
+                        System.out.print(" X ");
+                    } else {
+                        System.out.print(" / ");
+                    }
+                }
+                System.out.println();
+            }
+            System.out.println("-".repeat(columnas * 2));
+        }
+
+        public Array2d getGrid() {
+            return grid;
+        }
+    }
