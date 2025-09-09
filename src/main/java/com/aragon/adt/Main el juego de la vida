@@ -1,0 +1,34 @@
+package com.aragon.juegodelavida;
+
+    public class Main {
+        public static void main(String[] args) {
+
+            JuegoDeLaVida juego = new JuegoDeLaVida(10, 10);
+
+
+            int[][] patronInicial = {
+                    {4, 4}, {4, 5}, {4, 6},
+                    {5, 4}, {6, 5}
+            };
+
+            juego.configurarInicial(patronInicial);
+
+            System.out.println(" JUEGO DE LA VIDA ");
+            System.out.println("Con 10 generaciones:\n");
+
+
+            for (int generacion = 0; generacion < 10; generacion++) {
+                juego.mostrarGeneracion(generacion);
+                juego.siguienteGeneracion();
+
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            juego.mostrarGeneracion(10);
+        }
+    }
